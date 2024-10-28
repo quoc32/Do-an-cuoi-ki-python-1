@@ -1,0 +1,28 @@
+
+Dữ liệu trong tập diabetes dataset này được thu thập từ các hồ sơ bệnh nhân tại bệnh viện ở Iraq, bao gồm thông tin y tế và kết quả xét nghiệm. Dưới đây là mô tả của các thuộc tính trong tập dữ liệu này:
+
+No. of Patient: Số thứ tự hoặc ID của bệnh nhân.
+Sugar Level Blood: Mức đường huyết của bệnh nhân, một chỉ số chính để chẩn đoán và quản lý bệnh tiểu đường.
+Age: Tuổi của bệnh nhân.
+Gender: Giới tính của bệnh nhân.
+Creatinine ratio (Cr): Tỷ lệ creatinine trong máu, phản ánh chức năng thận.
+Body Mass Index (BMI): Chỉ số khối cơ thể, phản ánh tình trạng cân nặng.
+Urea: Nồng độ ure trong máu, là một chỉ số quan trọng để đánh giá chức năng thận.
+Cholesterol (Chol): Nồng độ cholesterol tổng trong máu.
+Fasting Lipid Profile: Bộ xét nghiệm lipid lúc đói, bao gồm:
+Total Cholesterol: Tổng cholesterol trong máu.
+LDL: Lipoprotein mật độ thấp (cholesterol "xấu").
+VLDL: Lipoprotein tỷ trọng rất thấp.
+Triglycerides (TG): Nồng độ triglyceride trong máu.
+HDL Cholesterol: Lipoprotein mật độ cao (cholesterol "tốt").
+HbA1c: Chỉ số hemoglobin glycated, thể hiện mức đường huyết trung bình trong 2-3 tháng trước.
+Class: Tình trạng bệnh tiểu đường của bệnh nhân, với ba trạng thái có thể:
+Diabetic: Bệnh nhân đã được chẩn đoán mắc bệnh tiểu đường.
+Non-Diabetic: Bệnh nhân không mắc bệnh tiểu đường.
+Predict-Diabetic: Bệnh nhân có nguy cơ hoặc đang trong giai đoạn tiền tiểu đường.
+Dữ liệu này có thể được sử dụng để phân tích, đánh giá nguy cơ mắc tiểu đường, hoặc xây dựng các mô hình dự đoán bệnh tiểu đường dựa trên các chỉ số y tế và kết quả xét nghiệm.
+
+
+Ngày xuất bản: 18 tháng 7, 2020
+Người đóng góp: Ahlam Rashid
+DOI: 10.17632/wj9rwkp9c2.1
