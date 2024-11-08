@@ -11,21 +11,20 @@ class App:
         self.root.title("Window")
         self.root.geometry("330x230")
         self.root.configure(bg="purple")
-        # self.root.resizable(False, False)
+        # self.root.resizable(False, False) # resize able
 
         # Dữ liệu của App
-        self.df = pd.read_csv('../data/data.csv')
-
-        # Các TRƯỜNG thông tin
-        self.columns = self.df.columns.to_list()
-        print(self.columns)
+        self.df = pd.read_csv('../data/dataset/data.csv')
+        self.data_fields = self.df.columns.to_list() # Các TRƯỜNG thông tin
+        self.data_fields.remove("ID")
+        self.data_fields.remove("No_Pation")
 
         # Các Page của App
         # Trang chứa thông tin cơ bản của Data
         appDataInfoPage = DataInfoPage(master=self.root, name="Data Information", df=self.df)
 
         # Trang chứa các tiện ích tạo Đồ Thị
-        appCreateChartPage = CreateChartPage(master=self.root, name="Create Chart")
+        appCreateChartPage = CreateChartPage(master=self.root, name="Create Chart", fields=self.data_fields, df=self.df)
 
         # Trang chứa tiện ích đổi Dữ liệu
         appChangeDataPage = ChangeDataPage(master=self.root, name="Change Data")
@@ -52,10 +51,6 @@ class App:
         # Tạo nút Lọc dữ liệu
         button = tk.Button(self.root, text="Lọc Dữ Liệu", command=lambda: go_to_filter_data(self.root, self.pages))
         button.place(x=250, y=5, width=70, height=30)
-
-        # Tạo nút Test
-        # button = tk.Button(self.root, text="Test", command=on_button_click)
-        # button.place(x=0, y=40, width=70, height=30)
 
     def turn_on(self):
         self.root.mainloop()
