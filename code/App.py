@@ -2,22 +2,27 @@
 import tkinter as tk
 import pandas as pd
 from command import *
-from Page import DataInfoPage, CreateChartPage, ChangeDataPage, FilterDataPage
+from Page import DataInfoPage, CreateChartPage, ChangeDataPage, FilterDataPage, ReadDataPage
 
 class App:
     # root, df, columns
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("Window")
-        self.root.geometry("330x230")
+        self.root.geometry("880x450")
         self.root.configure(bg="purple")
-        # self.root.resizable(False, False) # resize able
+        self.root.resizable(False, False) # resize able
 
         # Dữ liệu của App
         self.df = pd.read_csv('../data/dataset/data.csv')
         self.data_fields = self.df.columns.to_list() # Các TRƯỜNG thông tin
         self.data_fields.remove("ID")
         self.data_fields.remove("No_Pation")
+        
+        # Filter Data Info
+        self.filterInfo = {
+            "isAll": True
+        }
 
         # Các Page của App
         # Trang chứa thông tin cơ bản của Data
@@ -29,28 +34,35 @@ class App:
         # Trang chứa tiện ích đổi Dữ liệu
         appChangeDataPage = ChangeDataPage(master=self.root, name="Change Data")
 
-        # Trang chứa tiện ích lọc Dữ liệu
+        # Trang chứa tiện ích đọc Dữ liệu
+        appReadDataPage = ReadDataPage(master=self.root, name="Read Data", df=self.df, filterInfo=self.filterInfo)
+        # Trang chứa tiện ích lọc Dữ liệu (bổ trợ cho đọc)
         appFilterDataPage = FilterDataPage(master=self.root, name="Filter Data")
 
         self.pages = {
             "DataInfo": appDataInfoPage,
             "CreateChart": appCreateChartPage,
             "ChangeData": appChangeDataPage,
-            "FilterData": appFilterDataPage
+            "FilterData": appFilterDataPage,
+            "ReadData": appReadDataPage,
         }
 
         # Tạo nút GIỚI THIỆU
-        button = tk.Button(self.root, text="Giới Thiệu", command=lambda: introduce(self.root, self.pages))
-        button.place(x=10, y=5, width=70, height=30)
+        button = tk.Button(self.root, text="Data Info", command=lambda: introduce(self.root, self.pages))
+        button.place(x=0, y=0, width=80, height=30)
         # Tạo nút TẠO BIỂU ĐỒ
         button = tk.Button(self.root, text="Tạo Biểu Đồ", command=lambda: go_to_create_chart(self.root, self.pages))
-        button.place(x=90, y=5, width=70, height=30)
+        button.place(x=0, y=30, width=80, height=30)
         # Tạo nút Đổi dữ liệu
         button = tk.Button(self.root, text="Đổi Dữ Liệu", command=lambda: go_to_change_data(self.root, self.pages))
-        button.place(x=170, y=5, width=70, height=30)
-        # Tạo nút Lọc dữ liệu
+        button.place(x=0, y=60, width=80, height=30)
+
+        # Tạo nút Đọc dữ liệu
+        button = tk.Button(self.root, text="Xem Dữ Liệu", command=lambda: go_to_read_data(self.root, self.pages))
+        button.place(x=0, y=120, width=80, height=30)
+        # Tạo nút Lọc dữ liệu (bổ trợ cho đọc dữ liệu)
         button = tk.Button(self.root, text="Lọc Dữ Liệu", command=lambda: go_to_filter_data(self.root, self.pages))
-        button.place(x=250, y=5, width=70, height=30)
+        button.place(x=0, y=150, width=80, height=30)
 
     def turn_on(self):
         self.root.mainloop()

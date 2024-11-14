@@ -3,7 +3,7 @@ import pandas as pd
 import seaborn as sns
 
 # Đọc dữ liệu
-df = pd.read_csv('/Users/coffat/Documents/Do_an_cuoi_ki_python/Do-an-cuoi-ki-python-1/data/data.csv')
+df = pd.read_csv('../../data/data.csv')
 
 # Đếm số lượng nam và nữ
 gender_counts = df['Gender'].value_counts()

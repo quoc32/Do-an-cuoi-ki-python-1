@@ -1,7 +1,7 @@
 
 import pandas as pd
 import matplotlib.pyplot as plt
-import default_chart.IMB_class
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 def on_button_click():
     print("Nút đã được nhấn!")
@@ -23,38 +23,52 @@ def on_button_click():
     plt.show()
 
 def introduce(root, pages):
-    print("Đây là ứng dụng phân tích dữ liệu.")
     # Ẩn tất cả các page
     for page_key in pages:
         pages[page_key].place_forget()
     # Hiện Page "CreateChart"
-    pages["DataInfo"].place(x=0, y=40)
+    pages["DataInfo"].place(x=80, y=0)
 
 def go_to_create_chart(root, pages):
-    print("Đến trang Tạo biểu đồ")
     # Ẩn tất cả các page
     for page_key in pages:
         pages[page_key].place_forget()
     # Hiện Page "CreateChart"
-    pages["CreateChart"].place(x=0, y=40)
+    pages["CreateChart"].place(x=80, y=0)
     
 def go_to_filter_data(root, pages):
-    print("Đến trang Lọc dữ liệu")
     # Ẩn tất cả các page
     for page_key in pages:
         pages[page_key].place_forget()
     # Hiện Page "CreateChart"
-    pages["FilterData"].place(x=0, y=40)
+    pages["FilterData"].place(x=80, y=0)
+
+def go_to_read_data(root, pages):
+    # Ẩn tất cả các page
+    for page_key in pages:
+        pages[page_key].place_forget()
+    # Hiện Page "CreateChart"
+    pages["ReadData"].place(x=80, y=0)
 
 def go_to_change_data(root, pages):
-    print("Đến trang Tạo biểu đồ")
     # Ẩn tất cả các page
     for page_key in pages:
         pages[page_key].place_forget()
     # Hiện Page "CreateChart"
-    pages["ChangeData"].place(x=0, y=40)
+    pages["ChangeData"].place(x=80, y=0)
 
 ###############################
+from default_chart.bieuDo1 import fig1
+def veBieuDo1(frame):
+    print("bd1")
+    canvas = FigureCanvasTkAgg(fig1, master=frame)
+    canvas.draw()
+    tk_canvas = canvas.get_tk_widget()
+    tk_canvas.place(x=12, y=72)
+
+
+
+
 ###############################
 
 # Vẽ đồ thị đường thẳng
