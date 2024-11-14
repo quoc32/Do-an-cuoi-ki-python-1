@@ -3,7 +3,7 @@ import pandas as pd
 import seaborn as sns
 
 # Đọc dữ liệu
-df = pd.read_csv('/Users/coffat/Documents/Do_an_cuoi_ki_python/Do-an-cuoi-ki-python-1/data/data.csv')
+df = pd.read_csv('data.csv')
 
 # Lấy dữ liệu phân phối theo lớp sức khỏe
 class_counts = df['CLASS'].value_counts()
