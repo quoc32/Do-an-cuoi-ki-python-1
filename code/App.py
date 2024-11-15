@@ -2,15 +2,15 @@
 import tkinter as tk
 import pandas as pd
 from command import *
-from Page import DataInfoPage, CreateChartPage, ChangeDataPage, FilterDataPage, ReadDataPage
+from Page import DataInfoPage, CreateChartPage, ChangeDataPage, FilterDataPage, ReadDataPage, AboutUsPage
 
 class App:
     # root, df, columns
     def __init__(self):
         self.root = tk.Tk()
-        self.root.title("Window")
+        self.root.title("Data App")
+        self.root.iconbitmap("./image/icon.ico")
         self.root.geometry("880x450")
-        self.root.configure(bg="purple")
         self.root.resizable(False, False) # resize able
 
         # Dữ liệu của App
@@ -39,12 +39,16 @@ class App:
         # Trang chứa tiện ích lọc Dữ liệu (bổ trợ cho đọc)
         appFilterDataPage = FilterDataPage(master=self.root, name="Filter Data")
 
+        # Trang chứa tiện ích About Us, giới thiệu nhóm
+        appAboutUsPage = AboutUsPage(master=self.root, name="About Us")
+
         self.pages = {
             "DataInfo": appDataInfoPage,
             "CreateChart": appCreateChartPage,
             "ChangeData": appChangeDataPage,
             "FilterData": appFilterDataPage,
             "ReadData": appReadDataPage,
+            "AboutUs": appAboutUsPage,
         }
 
         # Tạo nút GIỚI THIỆU
@@ -64,12 +68,17 @@ class App:
         button = tk.Button(self.root, text="Lọc Dữ Liệu", command=lambda: go_to_filter_data(self.root, self.pages))
         button.place(x=0, y=150, width=80, height=30)
 
+        # Tạo nút About Us
+        button = tk.Button(self.root, text="About Us", command=lambda: go_to_about_us(self.root, self.pages))
+        button.place(x=0, y=420, width=80, height=30)
+
+
+        # go_to_about_us ban đầu
+        go_to_about_us(self.root, self.pages)
+
     def turn_on(self):
         self.root.mainloop()
-
-
     
-
 
 if __name__ == "__main__":
     print("App module.")

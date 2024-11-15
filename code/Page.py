@@ -2,11 +2,11 @@ import tkinter as tk
 from tkinter import ttk
 from io import StringIO
 
-from command import drawCustomHandle, drawDefaultHandle, veBieuDo1
+from command import *
 
 class Page(tk.Frame):
     def __init__(self, master, name):
-        super().__init__(master, bd=5, relief=tk.RIDGE, width=800, height=450)
+        super().__init__(master, bd=5, relief=tk.RIDGE, width=799, height=450)
         self.name = name
         self.pack_propagate(False)
         self.configure(bg="black")
@@ -54,41 +54,49 @@ class CreateChartPage(Page):
         self.df = df
 
         # Ô chọn đồ thị mặc định
-        cacDoThiMacDinh = ["1. Đồ thị 1", "2. Đồ thị 2", "3. Biểu đồ 3", "0. Custom"]
-        doThiMacDinh = ttk.Combobox(master=self, values=cacDoThiMacDinh)
-        doThiMacDinh.set("1. Đồ thị 1")
+        cacDoThiMacDinh = [
+            "1. HbA1c_BMI_By_Health_Class", 
+            "2. Triglycerides_LDL_By_Health_Class 1", 
+            "3. Age_And_Cholesterol", 
+            "4. Age_Distribution_Histogram",
+            "5. Age_Distribution_By_Health_Class",
+            "6. Cholesterol_Levels_Box_Plot",
+            "7. Gender_Distribution_Donut_Chart",
+            "8. HbA1c_Distribution_Histogram",
+            "9. Health_Class_Distribution_Donut_Chart",
+        ]
+        doThiMacDinh = ttk.Combobox(master=self, values=cacDoThiMacDinh, width=30)
+        doThiMacDinh.set("1. HbA1c_BMI_By_Health_Class")
         doThiMacDinh.place(x=5, y=5)
-
-        {
-        # # Ô chọn loại đồ thị
-        # cacloaiDoThi = ["Đồ thị đường", "Đồ thị phân tán", "Đồ thị cột", "Biểu đồ tròn"]
-        # loaiDoThi = ttk.Combobox(master=self, values=cacloaiDoThi, state="disabled")
-        # loaiDoThi.set("Chọn loại đồ thị")
-        # loaiDoThi.place(x=5, y=30)
-
-        # # Ô chọn loại đồ thị giá trị cho trục X
-        # cac_truc_x = self.fields
-        # truc_x = ttk.Combobox(master=self, values=cac_truc_x, state="disabled")
-        # truc_x.set("Trục X")
-        # truc_x.place(x=5, y=55)
-
-        # # Ô chọn loại đồ thị giá trị cho trục X
-        # cac_truc_y = self.fields
-        # truc_y = ttk.Combobox(master=self, values=cac_truc_y, state="disabled")
-        # truc_y.set("Trục Y")
-        # truc_y.place(x=5, y=80)
-        }
 
         # Tạo nút CREATE và xử lý khi nhấn
         def createHandle():
-            isCustom = (doThiMacDinh.get() == "0. Custom")
-            if isCustom:
-                pass
-            else:
-                veBieuDo1(self)
+            clearHandle() # Clear trước
+            if(doThiMacDinh.get() == "1. HbA1c_BMI_By_Health_Class"):
+                veBieuDo_HbA1c_BMI_By_Health_Class(self)
+            elif(doThiMacDinh.get() == "2. Triglycerides_LDL_By_Health_Class 1"):
+                veBieuDo_veBieuDo_Triglycerides_LDL_By_Health_Class(self)
+            elif(doThiMacDinh.get() == "3. Age_And_Cholesterol"):
+                veBieuDo_Age_And_Cholesterol(self)
+            elif(doThiMacDinh.get() == "4. Age_Distribution_Histogram"):
+                veBieuDo_Age_Distribution_Histogram(self)
+            elif(doThiMacDinh.get() == "5. Age_Distribution_By_Health_Class"):
+                veBieuDo_Age_Distribution_By_Health_Class(self)
+            elif(doThiMacDinh.get() == "6. Cholesterol_Levels_Box_Plot"):
+                veBieuDo_Cholesterol_Levels_Box_Plot(self)
+            elif(doThiMacDinh.get() == "6. Cholesterol_Levels_Box_Plot"):
+                veBieuDo_Cholesterol_Levels_Box_Plot(self)
+            elif(doThiMacDinh.get() == "7. Gender_Distribution_Donut_Chart"):
+                veBieuDo_Gender_Distribution_Donut_Chart(self)
+            elif(doThiMacDinh.get() == "7. Gender_Distribution_Donut_Chart"):
+                veBieuDo_Gender_Distribution_Donut_Chart(self)
+            elif(doThiMacDinh.get() == "8. HbA1c_Distribution_Histogram"):
+                veBieuDo_HbA1c_Distribution_Histogram(self)
+            elif(doThiMacDinh.get() == "9. Health_Class_Distribution_Donut_Chart"):
+                veBieuDo_Health_Class_Distribution_Donut_Chart(self)            
 
         button = tk.Button(master=self, text="Create", command=createHandle)
-        button.place(x=5, y=30, width=70, height=30)
+        button.place(x=140, y=30, width=70, height=30)
 
         # Tạo nút CLEAR và xử lý khi nhấn
         def clearHandle():
@@ -97,24 +105,7 @@ class CreateChartPage(Page):
                     wg.destroy() # Xóa tk.Canvas
 
         button = tk.Button(master=self, text="Clear", command=clearHandle)
-        button.place(x=80, y=30, width=70, height=30)
-
-        {
-        # Thêm mở chọn và đóng chọn cho các combobox khác
-        # def on_custom_select(event):
-        #     # Bật các combobox khác nếu "0. Custom" được chọn
-        #     if doThiMacDinh.get() == "0. Custom":
-        #         loaiDoThi.config(state="normal")
-        #         truc_x.config(state="normal")
-        #         truc_y.config(state="normal")
-        #     # Tắt các combobox khác nếu giá trị khác "0. Custom" được chọn
-        #     else:
-        #         loaiDoThi.config(state="disabled")
-        #         truc_x.config(state="disabled")
-        #         truc_y.config(state="disabled")
-
-        # doThiMacDinh.bind("<<ComboboxSelected>>", on_custom_select)
-        }
+        button.place(x=65, y=30, width=70, height=30)
 
 class ReadDataPage(Page):
     def __init__(self, master, name, df, filterInfo=None):
@@ -258,6 +249,46 @@ class ChangeDataPage(Page):
     def __init__(self, master, name):
         super().__init__(master, name)
 
+# Trang lọc
 class FilterDataPage(Page):
     def __init__(self, master, name):
         super().__init__(master, name)
+
+
+
+# Trang giới thiệu
+from PIL import Image, ImageTk
+class AboutUsPage(Page):
+    def __init__(self, master, name):
+        super().__init__(master, name)
+
+        self.start_x = 20
+        self.pict_w = 170
+        self.pict_padding = 20
+
+        # Them anh tv 1
+        img_tv1 = Image.open("./image/quoc.png")
+        img_tv1_w, img_tv1_h = img_tv1.size
+        img_tv1 = img_tv1.resize((img_tv1_w // 2, img_tv1_h // 2))
+        self.tk_img_tv1 = ImageTk.PhotoImage(img_tv1)
+
+        label_tv1 = tk.Label(self, image=self.tk_img_tv1, text="Quốc: UI", compound='top')
+        label_tv1.place(x=self.start_x, y=10)
+
+        # Them anh tv 2
+        img_tv2 = Image.open("./image/quoc.png")
+        img_tv2_w, img_tv2_h = img_tv2.size
+        img_tv2 = img_tv2.resize((img_tv2_w // 2, img_tv2_h // 2))
+        self.tk_img_tv2 = ImageTk.PhotoImage(img_tv2)
+
+        label_tv2 = tk.Label(self, image=self.tk_img_tv2, text="TV2: CV2", compound='top')
+        label_tv2.place(x=self.start_x + 1 * (self.pict_w + self.pict_padding), y=10)
+        
+        # Them anh tv 3
+        img_tv3 = Image.open("./image/quoc.png")
+        img_tv3_w, img_tv3_h = img_tv3.size
+        img_tv3 = img_tv3.resize((img_tv3_w // 2, img_tv3_h // 2))
+        self.tk_img_tv3 = ImageTk.PhotoImage(img_tv3)
+
+        label_tv3 = tk.Label(self, image=self.tk_img_tv3, text="TV3: CV3", compound='top')
+        label_tv3.place(x=self.start_x + 2 * (self.pict_w + self.pict_padding), y=10)

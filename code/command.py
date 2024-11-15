@@ -3,71 +3,118 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-def on_button_click():
-    print("Nút đã được nhấn!")
-    # Đọc dữ liệu
-    df = pd.read_csv('../data/data.csv')
-
-    # Vẽ biểu đồ scatter
-    plt.figure(figsize=(10, 6))
-    for class_label, color in zip(['N', 'P', 'Y'], ['blue', 'orange', 'green']):
-        subset = df[df['CLASS'] == class_label]
-        plt.scatter(subset['AGE'], subset['BMI'], label=class_label, color=color)
-
-    # Thêm các chi tiết cho biểu đồ
-    plt.xlabel('Age')
-    plt.ylabel('BMI')
-    plt.title('Scatter Plot of Age vs BMI by Class')
-    plt.legend(title="Class")
-    plt.grid(True)
-    plt.show()
-
 def introduce(root, pages):
     # Ẩn tất cả các page
     for page_key in pages:
         pages[page_key].place_forget()
     # Hiện Page "CreateChart"
-    pages["DataInfo"].place(x=80, y=0)
+    pages["DataInfo"].place(x=81, y=0)
 
 def go_to_create_chart(root, pages):
     # Ẩn tất cả các page
     for page_key in pages:
         pages[page_key].place_forget()
     # Hiện Page "CreateChart"
-    pages["CreateChart"].place(x=80, y=0)
+    pages["CreateChart"].place(x=81, y=0)
     
 def go_to_filter_data(root, pages):
     # Ẩn tất cả các page
     for page_key in pages:
         pages[page_key].place_forget()
     # Hiện Page "CreateChart"
-    pages["FilterData"].place(x=80, y=0)
+    pages["FilterData"].place(x=81, y=0)
 
 def go_to_read_data(root, pages):
     # Ẩn tất cả các page
     for page_key in pages:
         pages[page_key].place_forget()
     # Hiện Page "CreateChart"
-    pages["ReadData"].place(x=80, y=0)
+    pages["ReadData"].place(x=81, y=0)
 
 def go_to_change_data(root, pages):
     # Ẩn tất cả các page
     for page_key in pages:
         pages[page_key].place_forget()
     # Hiện Page "CreateChart"
-    pages["ChangeData"].place(x=80, y=0)
+    pages["ChangeData"].place(x=81, y=0)
+
+def go_to_about_us(root, pages):
+    # Ẩn tất cả các page
+    for page_key in pages:
+        pages[page_key].place_forget()
+    # Hiện Page "CreateChart"
+    pages["AboutUs"].place(x=81, y=0)
 
 ###############################
 from default_chart.bieuDo1 import fig1
 def veBieuDo1(frame):
-    print("bd1")
     canvas = FigureCanvasTkAgg(fig1, master=frame)
     canvas.draw()
     tk_canvas = canvas.get_tk_widget()
     tk_canvas.place(x=12, y=72)
 
+from default_chart.HbA1c_BMI_By_Health_Class import HbA1c_BMI_By_Health_Class__fig
+def veBieuDo_HbA1c_BMI_By_Health_Class(frame):
+    canvas = FigureCanvasTkAgg(HbA1c_BMI_By_Health_Class__fig, master=frame)
+    canvas.draw()
+    tk_canvas = canvas.get_tk_widget()
+    tk_canvas.place(x=12, y=72)
 
+from default_chart.Age_And_Cholesterol import Age_And_Cholesterol__fig
+def veBieuDo_Age_And_Cholesterol(frame):
+    canvas = FigureCanvasTkAgg(Age_And_Cholesterol__fig, master=frame)
+    canvas.draw()
+    tk_canvas = canvas.get_tk_widget()
+    tk_canvas.place(x=12, y=72)
 
+from default_chart.Age_Distribution_Histogram import Age_Distribution_Histogram__fig
+def veBieuDo_Age_Distribution_Histogram(frame):
+    canvas = FigureCanvasTkAgg(Age_Distribution_Histogram__fig, master=frame)
+    canvas.draw()
+    tk_canvas = canvas.get_tk_widget()
+    tk_canvas.place(x=12, y=72)
+
+from default_chart.Age_Distribution_By_Health_Class import Age_Distribution_By_Health_Class__fig
+def veBieuDo_Age_Distribution_By_Health_Class(frame):
+    canvas = FigureCanvasTkAgg(Age_Distribution_By_Health_Class__fig, master=frame)
+    canvas.draw()
+    tk_canvas = canvas.get_tk_widget()
+    tk_canvas.place(x=12, y=72)
+
+from default_chart.Cholesterol_Levels_Box_Plot import Cholesterol_Levels_Box_Plot__fig
+def veBieuDo_Cholesterol_Levels_Box_Plot(frame):
+    canvas = FigureCanvasTkAgg(Cholesterol_Levels_Box_Plot__fig, master=frame)
+    canvas.draw()
+    tk_canvas = canvas.get_tk_widget()
+    tk_canvas.place(x=12, y=72)
+
+from default_chart.Gender_Distribution_Donut_Chart import Gender_Distribution_Donut_Chart__fig
+def veBieuDo_Gender_Distribution_Donut_Chart(frame):
+    canvas = FigureCanvasTkAgg(Gender_Distribution_Donut_Chart__fig, master=frame)
+    canvas.draw()
+    tk_canvas = canvas.get_tk_widget()
+    tk_canvas.place(x=12, y=72)
+
+from default_chart.HbA1c_Distribution_Histogram import HbA1c_Distribution_Histogram__fig
+def veBieuDo_HbA1c_Distribution_Histogram(frame):
+    canvas = FigureCanvasTkAgg(HbA1c_Distribution_Histogram__fig, master=frame)
+    canvas.draw()
+    tk_canvas = canvas.get_tk_widget()
+    tk_canvas.place(x=12, y=72)
+
+from default_chart.Health_Class_Distribution_Donut_Chart import Health_Class_Distribution_Donut_Chart__fig
+def veBieuDo_Health_Class_Distribution_Donut_Chart(frame):
+    canvas = FigureCanvasTkAgg(Health_Class_Distribution_Donut_Chart__fig, master=frame)
+    canvas.draw()
+    tk_canvas = canvas.get_tk_widget()
+    tk_canvas.place(x=12, y=72)
+
+from default_chart.Triglycerides_LDL_By_Health_Class import Triglycerides_LDL_By_Health_Class__fig
+def veBieuDo_veBieuDo_Triglycerides_LDL_By_Health_Class(frame):
+    canvas = FigureCanvasTkAgg(Triglycerides_LDL_By_Health_Class__fig, master=frame)
+    canvas.draw()
+    tk_canvas = canvas.get_tk_widget()
+    tk_canvas.place(x=12, y=72)
 
 ###############################
 
