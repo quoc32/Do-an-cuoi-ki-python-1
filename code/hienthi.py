@@ -15,8 +15,12 @@ window = tk.Tk()
 window.title("Hiển thị dữ liệu")
 cols = list(data.columns)
 tree = ttk.Treeview(window, columns=cols, show='headings', height=so_dong_tren_trang)  # Cập nhật số dòng hiển thị là 30
+
+# Cập nhật độ rộng cho các cột sao cho phù hợp
 for col in cols:
     tree.heading(col, text=col)
+    tree.column(col, width=100, anchor='center')  # Thiết lập độ rộng cho cột
+
 tree.pack(expand=True, fill=tk.BOTH)
 
 # Khung chứa các nút và nhãn số trang
@@ -93,6 +97,6 @@ btn_den_trang.pack(side=tk.LEFT, padx=10)
 hien_thi_du_lieu(trang_hien_tai)
 
 # Thiết lập kích thước cửa sổ để đủ không gian cho Treeview
-window.geometry("900x800")  # Cập nhật kích thước cửa sổ lớn hơn nếu cần
+window.geometry("1200x800")  # Cập nhật kích thước cửa sổ lớn hơn nếu cần
 
 window.mainloop()
