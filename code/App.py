@@ -14,7 +14,7 @@ class App:
         self.root.resizable(False, False) # resize able
 
         # Dữ liệu của App
-        self.df = pd.read_csv('../data/dataset/data.csv')
+        self.df = pd.read_csv('H:\SAVE CODE\Do-an-cuoi-ki-python-1\data\dataset\data.csv')
         self.data_fields = self.df.columns.to_list() # Các TRƯỜNG thông tin
         self.data_fields.remove("ID")
         self.data_fields.remove("No_Pation")
