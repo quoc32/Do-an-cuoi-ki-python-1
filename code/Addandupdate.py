@@ -132,17 +132,23 @@ def xoa_du_lieu_moi():
             messagebox.showwarning("Cảnh báo", "Vui lòng chọn ít nhất một dòng để xóa!")
             return
 
+        # Lưu lại các chỉ số của các dòng đã chọn để xóa sau
+        indices_to_drop = [tree.index(item) for item in selected_items]
+
+        # Xóa dữ liệu từ Treeview
         for item in selected_items:
             tree.delete(item)
 
-        # Cập nhật DataFrame bằng cách loại bỏ các dòng đã chọn
-        indices_to_drop = [tree.index(item) for item in selected_items]
-        data.drop(indices_to_drop, inplace=True)
+        # Loại bỏ các chỉ số đã chọn từ DataFrame
+        data.drop(data.index[indices_to_drop], inplace=True)
+
+        # Đặt lại chỉ số cho DataFrame
+        data.reset_index(drop=True, inplace=True)
 
         # Lưu lại dữ liệu vào file CSV
         data.to_csv(file_path, index=False)
         messagebox.showinfo("Thành công", "Dữ liệu đã được xóa!")
-        hien_thi_du_lieu()  # Cập nhật Treeview
+        hien_thi_du_lieu()  # Cập nhật Treeview với dữ liệu mới
     except Exception as e:
         messagebox.showerror("Lỗi", f"Không thể xóa dữ liệu: {e}")
 
@@ -184,7 +190,7 @@ def cap_nhat_du_lieu():
         data.to_csv(file_path, index=False)
         messagebox.showinfo("Thành công", "Dữ liệu đã được cập nhật!")
     except Exception as e:
-        messagebox.showerror("Thành công", f"Dữ liệu đã được cập nhật! {e}")
+        messagebox.showerror("lỗi", f"Dữ liệu đã không được cập nhật! {e}")
 
 btn_cap_nhat = tk.Button(frame_cap_nhat_du_lieu, text="Cập nhật", command=cap_nhat_du_lieu)
 btn_cap_nhat.pack(side=tk.LEFT, padx=10)
@@ -197,19 +203,25 @@ def xoa_du_lieu_cap_nhat():
             messagebox.showwarning("Cảnh báo", "Vui lòng chọn ít nhất một dòng để xóa!")
             return
 
+        # Lưu lại các chỉ số của các dòng đã chọn để xóa sau
+        indices_to_drop = [tree.index(item) for item in selected_items]
+
+        # Xóa dữ liệu từ Treeview
         for item in selected_items:
             tree.delete(item)
 
-        # Cập nhật DataFrame bằng cách loại bỏ các dòng đã chọn
-        indices_to_drop = [tree.index(item) for item in selected_items]
-        data.drop(indices_to_drop, inplace=True)
+        # Loại bỏ các chỉ số đã chọn từ DataFrame
+        data.drop(data.index[indices_to_drop], inplace=True)
+
+        # Đặt lại chỉ số cho DataFrame
+        data.reset_index(drop=True, inplace=True)
 
         # Lưu lại dữ liệu vào file CSV
         data.to_csv(file_path, index=False)
         messagebox.showinfo("Thành công", "Dữ liệu đã được xóa!")
-        hien_thi_du_lieu()  # Cập nhật Treeview
+        hien_thi_du_lieu()  # Cập nhật Treeview với dữ liệu mới
     except Exception as e:
-        messagebox.showerror("Thành công", f"Dữ liệu đã được cập nhật! {e}")
+        messagebox.showerror("Thành công", f"Dữ liệu đã không được cập nhật! {e}")
 
 btn_xoa_du_lieu_cap_nhat = tk.Button(frame_cap_nhat_du_lieu, text="Xóa dữ liệu", command=xoa_du_lieu_cap_nhat)
 btn_xoa_du_lieu_cap_nhat.pack(side=tk.LEFT, padx=10)
