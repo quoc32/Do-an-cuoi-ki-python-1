@@ -1,5 +1,5 @@
 
-import pandas as pd
+import tkinter as tk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
@@ -17,12 +17,12 @@ def go_to_create_chart(root, pages):
     # Hiện Page "CreateChart"
     pages["CreateChart"].place(x=81, y=0)
     
-def go_to_filter_data(root, pages):
+def go_to_clean_data(root, pages):
     # Ẩn tất cả các page
     for page_key in pages:
         pages[page_key].place_forget()
     # Hiện Page "CreateChart"
-    pages["FilterData"].place(x=81, y=0)
+    pages["CleanData"].place(x=81, y=0)
 
 def go_to_read_data(root, pages):
     # Ẩn tất cả các page
@@ -31,12 +31,12 @@ def go_to_read_data(root, pages):
     # Hiện Page "CreateChart"
     pages["ReadData"].place(x=81, y=0)
 
-def go_to_change_data(root, pages):
+def go_to_CRUD_data(root, pages):
     # Ẩn tất cả các page
     for page_key in pages:
         pages[page_key].place_forget()
     # Hiện Page "CreateChart"
-    pages["ChangeData"].place(x=81, y=0)
+    pages["CRUDData"].place(x=81, y=0)
 
 def go_to_about_us(root, pages):
     # Ẩn tất cả các page
@@ -46,75 +46,96 @@ def go_to_about_us(root, pages):
     pages["AboutUs"].place(x=81, y=0)
 
 ###############################
-from default_chart.bieuDo1 import fig1
-def veBieuDo1(frame):
-    canvas = FigureCanvasTkAgg(fig1, master=frame)
-    canvas.draw()
-    tk_canvas = canvas.get_tk_widget()
-    tk_canvas.place(x=12, y=72)
 
-from default_chart.HbA1c_BMI_By_Health_Class import HbA1c_BMI_By_Health_Class__fig
-def veBieuDo_HbA1c_BMI_By_Health_Class(frame):
-    canvas = FigureCanvasTkAgg(HbA1c_BMI_By_Health_Class__fig, master=frame)
-    canvas.draw()
-    tk_canvas = canvas.get_tk_widget()
-    tk_canvas.place(x=12, y=72)
+from PIL import Image, ImageTk
 
-from default_chart.Age_And_Cholesterol import Age_And_Cholesterol__fig
-def veBieuDo_Age_And_Cholesterol(frame):
-    canvas = FigureCanvasTkAgg(Age_And_Cholesterol__fig, master=frame)
-    canvas.draw()
-    tk_canvas = canvas.get_tk_widget()
-    tk_canvas.place(x=12, y=72)
+def veBieuDo_1(page):
+    img1 = Image.open("./chart_img/AgeDistributionByHealthClass.png")
+    img1 = img1.resize((550, 350))
+    page.tk_img1 = ImageTk.PhotoImage(img1)
 
-from default_chart.Age_Distribution_Histogram import Age_Distribution_Histogram__fig
-def veBieuDo_Age_Distribution_Histogram(frame):
-    canvas = FigureCanvasTkAgg(Age_Distribution_Histogram__fig, master=frame)
-    canvas.draw()
-    tk_canvas = canvas.get_tk_widget()
-    tk_canvas.place(x=12, y=72)
+    label1 = tk.Label(page, image=page.tk_img1)
+    label1.place(x=10, y=70)
 
-from default_chart.Age_Distribution_By_Health_Class import Age_Distribution_By_Health_Class__fig
-def veBieuDo_Age_Distribution_By_Health_Class(frame):
-    canvas = FigureCanvasTkAgg(Age_Distribution_By_Health_Class__fig, master=frame)
-    canvas.draw()
-    tk_canvas = canvas.get_tk_widget()
-    tk_canvas.place(x=12, y=72)
+def veBieuDo_2(page):
+    img2 = Image.open("./chart_img/beo_phi_theo_gioi_tinh.png")
+    img2 = img2.resize((550, 330))
+    page.tk_img2 = ImageTk.PhotoImage(img2)
 
-from default_chart.Cholesterol_Levels_Box_Plot import Cholesterol_Levels_Box_Plot__fig
-def veBieuDo_Cholesterol_Levels_Box_Plot(frame):
-    canvas = FigureCanvasTkAgg(Cholesterol_Levels_Box_Plot__fig, master=frame)
-    canvas.draw()
-    tk_canvas = canvas.get_tk_widget()
-    tk_canvas.place(x=12, y=72)
+    label2 = tk.Label(page, image=page.tk_img2)
+    label2.place(x=10, y=70)
 
-from default_chart.Gender_Distribution_Donut_Chart import Gender_Distribution_Donut_Chart__fig
-def veBieuDo_Gender_Distribution_Donut_Chart(frame):
-    canvas = FigureCanvasTkAgg(Gender_Distribution_Donut_Chart__fig, master=frame)
-    canvas.draw()
-    tk_canvas = canvas.get_tk_widget()
-    tk_canvas.place(x=12, y=72)
+def veBieuDo_3(page):
+    img3 = Image.open("./chart_img/bmi_vs_lipit.png")
+    img3 = img3.resize((700, 350))
+    page.tk_img3 = ImageTk.PhotoImage(img3)
 
-from default_chart.HbA1c_Distribution_Histogram import HbA1c_Distribution_Histogram__fig
-def veBieuDo_HbA1c_Distribution_Histogram(frame):
-    canvas = FigureCanvasTkAgg(HbA1c_Distribution_Histogram__fig, master=frame)
-    canvas.draw()
-    tk_canvas = canvas.get_tk_widget()
-    tk_canvas.place(x=12, y=72)
+    label3 = tk.Label(page, image=page.tk_img3)
+    label3.place(x=10, y=70)
 
-from default_chart.Health_Class_Distribution_Donut_Chart import Health_Class_Distribution_Donut_Chart__fig
-def veBieuDo_Health_Class_Distribution_Donut_Chart(frame):
-    canvas = FigureCanvasTkAgg(Health_Class_Distribution_Donut_Chart__fig, master=frame)
-    canvas.draw()
-    tk_canvas = canvas.get_tk_widget()
-    tk_canvas.place(x=12, y=72)
+def veBieuDo_4(page):
+    img4 = Image.open("./chart_img/bmi_vs_HbA1c.png")
+    img4 = img4.resize((550, 340))
+    page.tk_img4 = ImageTk.PhotoImage(img4)
 
-from default_chart.Triglycerides_LDL_By_Health_Class import Triglycerides_LDL_By_Health_Class__fig
-def veBieuDo_veBieuDo_Triglycerides_LDL_By_Health_Class(frame):
-    canvas = FigureCanvasTkAgg(Triglycerides_LDL_By_Health_Class__fig, master=frame)
-    canvas.draw()
-    tk_canvas = canvas.get_tk_widget()
-    tk_canvas.place(x=12, y=72)
+    label4 = tk.Label(page, image=page.tk_img4)
+    label4.place(x=10, y=70)
+
+def veBieuDo_5(page):
+    img5 = Image.open("./chart_img/chi_so_than.png")
+    img5 = img5.resize((700, 330))
+    page.tk_img5 = ImageTk.PhotoImage(img5)
+
+    label5 = tk.Label(page, image=page.tk_img5)
+    label5.place(x=10, y=70)
+
+def veBieuDo_6(page):
+    img6 = Image.open("./chart_img/ma_tran_tuong_quan.png")
+    img6 = img6.resize((600, 340))
+    page.tk_img6 = ImageTk.PhotoImage(img6)
+
+    label6 = tk.Label(page, image=page.tk_img6)
+    label6.place(x=10, y=70)
+
+def veBieuDo_7(page):
+    img7 = Image.open("./chart_img/mat_do_bmi.png")
+    img7 = img7.resize((550, 340))
+    page.tk_img7 = ImageTk.PhotoImage(img7)
+
+    label7 = tk.Label(page, image=page.tk_img7)
+    label7.place(x=10, y=70)
+    
+def veBieuDo_8(page):
+    img8 = Image.open("./chart_img/phan_bo_bmi.png")
+    img8 = img8.resize((550, 340))
+    page.tk_img8 = ImageTk.PhotoImage(img8)
+
+    label8 = tk.Label(page, image=page.tk_img8)
+    label8.place(x=10, y=70)
+
+def veBieuDo_9(page):
+    img9 = Image.open("./chart_img/phan_bo_chi_so_lipit.png")
+    img9 = img9.resize((700, 350))
+    page.tk_img9 = ImageTk.PhotoImage(img9)
+
+    label9 = tk.Label(page, image=page.tk_img9)
+    label9.place(x=10, y=70)
+
+def veBieuDo_10(page):
+    img10 = Image.open("./chart_img/phan_bo_hba1c.png")
+    img10 = img10.resize((550, 340))
+    page.tk_img10 = ImageTk.PhotoImage(img10)
+
+    label10 = tk.Label(page, image=page.tk_img10)
+    label10.place(x=10, y=70)
+    
+def veBieuDo_11(page):
+    img11 = Image.open("./chart_img/phan_bo_tuoi.png")
+    img11 = img11.resize((550, 330))
+    page.tk_img11 = ImageTk.PhotoImage(img11)
+
+    label11 = tk.Label(page, image=page.tk_img11)
+    label11.place(x=10, y=70)
 
 ###############################
 
