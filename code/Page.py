@@ -312,47 +312,151 @@ class AboutUsPage(Page):
         self.pict_w = 100
         self.pict_padding = 10
 
-        # Them anh tv 1
-        img_tv1 = Image.open("./image/quoc.png")
-        img_tv1_w, img_tv1_h = img_tv1.size
-        img_tv1 = img_tv1.resize((img_tv1_w // 2, img_tv1_h // 2))
-        self.tk_img_tv1 = ImageTk.PhotoImage(img_tv1)
+        # Them anh nền
+        img = Image.open("./image/meme4.png")
+        img = img.resize((787, 439))
+        self.tk_img = ImageTk.PhotoImage(img)
 
-        label_tv1 = tk.Label(self, image=self.tk_img_tv1, text="Quốc: UI chung", compound='top')
-        label_tv1.place(x=self.start_x, y=10)
+        label_img = tk.Label(self, image=self.tk_img, bg="black")
+        label_img.place(x=0, y=0)
 
-        # Them anh tv 2
-        img_tv2 = Image.open("./image/quoc.png")
-        img_tv2_w, img_tv2_h = img_tv2.size
-        img_tv2 = img_tv2.resize((img_tv2_w // 2, img_tv2_h // 2))
-        self.tk_img_tv2 = ImageTk.PhotoImage(img_tv2)
+        # Quoc
+        self.quoc_btn = tk.Button(master=self, text="Xem chiến binh", font=("Arial", 8), command=self.toggle_quoc)
+        self.quoc_btn.place(x=300, y=310)
 
-        label_tv2 = tk.Label(self, image=self.tk_img_tv2, text="TV2: CV2", compound='top')
-        label_tv2.place(x=self.start_x + 1 * (self.pict_w + self.pict_padding), y=10)
+        self.frame_quoc = tk.Frame(self,  relief="solid", borderwidth=1)
+        # self.frame_quoc.place(x=275, y=340)
+        tk.Label(self.frame_quoc, text="Tên chiến binh: Vũ Anh Quốc").pack()
+        tk.Label(self.frame_quoc, text="Mã số chiến binh: 23110296").pack()
+        tk.Label(self.frame_quoc, text="Nhiệm vụ: Thiết kế UI").pack()
+
+        self.quoc_toggle = False
         
-        # Them anh tv 3
-        img_tv3 = Image.open("./image/quoc.png")
-        img_tv3_w, img_tv3_h = img_tv3.size
-        img_tv3 = img_tv3.resize((img_tv3_w // 2, img_tv3_h // 2))
-        self.tk_img_tv3 = ImageTk.PhotoImage(img_tv3)
+        # Thang
+        self.thang_btn = tk.Button(master=self, text="Xem chiến binh", font=("Arial", 8), command=self.toggle_thang)
+        self.thang_btn.place(x=570, y=288)
 
-        label_tv3 = tk.Label(self, image=self.tk_img_tv3, text="TV3: CV3", compound='top')
-        label_tv3.place(x=self.start_x + 2 * (self.pict_w + self.pict_padding), y=10)
+        self.frame_thang = tk.Frame(self,  relief="solid", borderwidth=1)
+        # self.frame_thang.place(x=545, y=315)
+        tk.Label(self.frame_thang, text="Tên chiến binh: Vũ Toàn Thắng").pack()
+        tk.Label(self.frame_thang, text="Mã số chiến binh: 23110329").pack()
+        tk.Label(self.frame_thang, text="Nhiệm vụ: Đồ thị, Nội dung, Soạn báo cáo").pack()
 
-        # Them anh tv 4
-        img_tv4 = Image.open("./image/quoc.png")
-        img_tv4_w, img_tv4_h = img_tv4.size
-        img_tv4 = img_tv4.resize((img_tv4_w // 2, img_tv4_h // 2))
-        self.tk_img_tv4 = ImageTk.PhotoImage(img_tv4)
+        self.thang_toggle = False
+        
+        # Tai
+        self.tai_btn = tk.Button(master=self, text="Xem chiến binh", font=("Arial", 8), command=self.toggle_tai)
+        self.tai_btn.place(x=210, y=307)
 
-        label_tv4 = tk.Label(self, image=self.tk_img_tv4, text="tv4: CV3", compound='top')
-        label_tv4.place(x=self.start_x + 3 * (self.pict_w + self.pict_padding), y=10)
+        self.frame_tai = tk.Frame(self,  relief="solid", borderwidth=1)
+        # self.frame_tai.place(x=130, y=340)
+        tk.Label(self.frame_tai, text="Tên chiến binh: Nguyễn Phước Tài").pack()
+        tk.Label(self.frame_tai, text="Mã số chiến binh: 23110306").pack()
+        tk.Label(self.frame_tai, text="Nhiệm vụ: Xóa, thêm, tùy chỉnh dữ liệu").pack()
 
-        # Them anh tv 5
-        img_tv5 = Image.open("./image/quoc.png")
-        img_tv5_w, img_tv5_h = img_tv5.size
-        img_tv5 = img_tv5.resize((img_tv5_w // 2, img_tv5_h // 2))
-        self.tk_img_tv5 = ImageTk.PhotoImage(img_tv5)
+        self.tai_toggle = False
 
-        label_tv5 = tk.Label(self, image=self.tk_img_tv5, text="tv5: CV3", compound='top')
-        label_tv5.place(x=self.start_x + 4 * (self.pict_w + self.pict_padding), y=10)
+        # Huy
+        self.huy_btn = tk.Button(master=self, text="Xem chiến binh", font=("Arial", 8), command=self.toggle_huy)
+        self.huy_btn.place(x=125, y=280)
+
+        self.frame_huy = tk.Frame(self,  relief="solid", borderwidth=1)
+        # self.frame_huy.place(x=20, y=307)
+        tk.Label(self.frame_huy, text="Tên chiến binh: Nguyễn Nhật Huy").pack()
+        tk.Label(self.frame_huy, text="Mã số chiến binh: 23110226").pack()
+        tk.Label(self.frame_huy, text="Nhiệm vụ: Biểu đồ, Nội dung, Slice thuyết trình").pack()
+        
+        self.huy_toggle = False
+
+        # Tu
+        self.tu_btn = tk.Button(master=self, text="Xem chiến binh", font=("Arial", 8), command=self.toggle_tu)
+        self.tu_btn.place(x=460, y=312)
+        
+        self.frame_tu = tk.Frame(self,  relief="solid", borderwidth=1)
+        # self.frame_tu.place(x=440, y=340)
+        tk.Label(self.frame_tu, text="Tên chiến binh: Võ Văn Tú").pack()
+        tk.Label(self.frame_tu, text="Mã số chiến binh: 23110359").pack()
+        tk.Label(self.frame_tu, text="Nhiệm vụ: Clean Data, phụ Tài").pack()
+
+        self.tu_toggle = False
+        
+
+    def toggle_quoc(self):
+        self.frame_thang.place_forget()
+        self.thang_toggle = False
+        self.frame_tai.place_forget()
+        self.tai_toggle = False
+        self.frame_huy.place_forget()
+        self.huy_toggle = False
+        self.frame_tu.place_forget()
+        self.tu_toggle = False
+
+        if not self.quoc_toggle:
+            self.frame_quoc.place(x=275, y=340)
+        else:
+            self.frame_quoc.place_forget()
+        self.quoc_toggle = not self.quoc_toggle
+
+    def toggle_thang(self):
+        self.frame_quoc.place_forget()
+        self.quoc_toggle = False
+        self.frame_tai.place_forget()
+        self.tai_toggle = False
+        self.frame_huy.place_forget()
+        self.huy_toggle = False
+        self.frame_tu.place_forget()
+        self.tu_toggle = False
+
+        if not self.thang_toggle:
+            self.frame_thang.place(x=545, y=315)
+        else:
+            self.frame_thang.place_forget()
+        self.thang_toggle = not self.thang_toggle
+
+    def toggle_tu(self):
+        self.frame_thang.place_forget()
+        self.thang_toggle = False
+        self.frame_tai.place_forget()
+        self.tai_toggle = False
+        self.frame_huy.place_forget()
+        self.huy_toggle = False
+        self.frame_quoc.place_forget()
+        self.quoc_toggle = False
+
+        if not self.tu_toggle:
+            self.frame_tu.place(x=440, y=340)
+        else:
+            self.frame_tu.place_forget()
+        self.tu_toggle = not self.tu_toggle
+        
+    def toggle_huy(self):
+        self.frame_thang.place_forget()
+        self.thang_toggle = False
+        self.frame_tai.place_forget()
+        self.tai_toggle = False
+        self.frame_quoc.place_forget()
+        self.quoc_toggle = False
+        self.frame_tu.place_forget()
+        self.tu_toggle = False
+
+        if not self.huy_toggle:
+            self.frame_huy.place(x=40, y=307)
+        else:
+            self.frame_huy.place_forget()
+        self.huy_toggle = not self.huy_toggle
+        
+    def toggle_tai(self):
+        self.frame_thang.place_forget()
+        self.thang_toggle = False
+        self.frame_quoc.place_forget()
+        self.quoc_toggle = False
+        self.frame_huy.place_forget()
+        self.huy_toggle = False
+        self.frame_tu.place_forget()
+        self.tu_toggle = False
+
+        if not self.tai_toggle:
+            self.frame_tai.place(x=130, y=340)
+        else:
+            self.frame_tai.place_forget()
+        self.tai_toggle = not self.tai_toggle

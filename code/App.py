@@ -70,7 +70,7 @@ class App:
 
 
         # go_to_about_us ban đầu
-        go_to_create_chart(self.root, self.pages)
+        go_to_about_us(self.root, self.pages)
 
     def turn_on(self):
         self.root.mainloop()

@@ -3,8 +3,8 @@
 
 Làm sạch - Tú
 
-Đọc, thêm, sửa, xóa: Tài
+Đọc, thêm, sửa, xóa: Tài (Tú phụ)
 
 Tạo đồ thị + diễn giải nội dung tương ứng - 2 người: Huy + Thắng
 
-=> thứ 6 cho Quốc làm UI
+Quốc: làm UI
