@@ -45,6 +45,13 @@ def go_to_about_us(root, pages):
     # Hiện Page "CreateChart"
     pages["AboutUs"].place(x=81, y=0)
 
+def go_to_read_clean_data(root, pages):
+    # Ẩn tất cả các page
+    for page_key in pages:
+        pages[page_key].place_forget()
+    # Hiện Page "CreateChart"
+    pages["ReadCleanData"].place(x=81, y=0)
+
 ###############################
 
 from PIL import Image, ImageTk

@@ -59,7 +59,7 @@ def main(frame=None):
 
     # Cập nhật thông tin cho các nút điều hướng
     def update_page_info():
-        total_pages = (len(data) + ROWS_PER_PAGE - 1) // ROWS_PER_PAGE  # Tính toán tổng số trang
+        total_pages = (len(data) + ROWS_PER_PAGE - 1) // ROWS_PER_PAGE
         lbl_page_info.config(text=f"Trang {current_page + 1} / {total_pages}")
 
     # Khung cho các nút chức năng
@@ -77,11 +77,11 @@ def main(frame=None):
 
         # Làm sạch các ô nhập liệu
         for col in cols:
-            inputs[col].delete(0, tk.END)
+            inputs[col].delete(0, tk.END)  # Xóa nội dung ô nhập liệu
 
         # Tự động điền ID
         if 'ID' in cols:
-            max_id = data['ID'].astype(int).max()
+            max_id = data['ID'].astype(int).max() if not data['ID'].isnull().all() else 0
             inputs['ID'].insert(0, str(max_id + 1))
 
     btn_create_page = tk.Button(frame_nut_chuc_nang, text="Tạo dữ liệu mới", command=show_create_page)
@@ -96,17 +96,18 @@ def main(frame=None):
         frame_trich_loc.pack_forget()
         frame_xoa_du_lieu.pack_forget()
 
-        # Lấy dòng được chọn
         selected_items = tree.selection()
         if selected_items:
             selected_item = selected_items[0]
             index = tree.index(selected_item)
             selected_data = data.iloc[index]
 
-            # Điền dữ liệu vào các ô nhập liệu
             for col in cols:
-                update_inputs[col].delete(0, tk.END)
-                update_inputs[col].insert(0, selected_data[col])
+                if col in ['Gender', 'CLASS', 'BMI_CATEGORY']:
+                    update_inputs[col].set(selected_data[col])
+                else:
+                    update_inputs[col].delete(0, tk.END)
+                    update_inputs[col].insert(0, selected_data[col])
 
     btn_update_page = tk.Button(frame_nut_chuc_nang, text="Cập nhật dữ liệu", command=show_update_page)
     btn_update_page.pack(side=tk.LEFT, padx=5)
@@ -134,20 +135,13 @@ def main(frame=None):
                 messagebox.showwarning("Cảnh báo", "Vui lòng chọn ít nhất một dòng để xóa!")
                 return
 
-            # Lưu lại các chỉ số của các dòng đã chọn để xóa sau
-            indices_to_drop = [tree.index(item) for item in selected_items]
-
-            # Xóa dữ liệu từ Treeview
+            ids_to_delete = [tree.item(item)['values'][0] for item in selected_items]
             for item in selected_items:
                 tree.delete(item)
 
-            # Loại bỏ các chỉ số đã chọn từ DataFrame
-            data.drop(data.index[indices_to_drop], inplace=True)
-
-            # Đặt lại chỉ số cho DataFrame
-            data.reset_index(drop=True, inplace=True)
-
-            # Lưu lại dữ liệu vào file CSV
+            global data
+            data = data[~data['ID'].isin(ids_to_delete)]
+            # Lưu dữ liệu vào file CSV sau khi xóa
             data.to_csv(file_path, index=False)
             messagebox.showinfo("Thành công", "Dữ liệu đã được xóa!")
             hien_thi_du_lieu()
@@ -164,8 +158,8 @@ def main(frame=None):
         frame_tao_du_lieu_moi.pack_forget()
         frame_cap_nhat_du_lieu.pack_forget()
         frame_sap_xep_du_lieu_theo_id.pack_forget()
-        frame_trich_loc.pack_forget()
         frame_xoa_du_lieu.pack_forget()
+        frame_trich_loc.pack_forget()
 
     btn_search_page = tk.Button(frame_nut_chuc_nang, text="Tìm kiếm", command=show_search_page)
     btn_search_page.pack(side=tk.LEFT, padx=5)
@@ -266,25 +260,40 @@ def main(frame=None):
     for col in cols:
         label = tk.Label(header_frame_create, text=col, width=10)
         label.pack(side=tk.LEFT)
-        
-        entry = tk.Entry(frame_tao_du_lieu_moi, width=10)
+
+        # Thay thế các ô nhập liệu bằng Combobox cho Gender, CLASS và BMI_CATEGORY
+        if col in ['Gender', 'CLASS', 'BMI_CATEGORY']:
+            entry = ttk.Combobox(frame_tao_du_lieu_moi, width=10)
+            unique_values = ['None'] + data[col].unique().tolist()
+            entry['values'] = unique_values
+            entry.set('None')  # Giá trị mặc định
+        else:
+            entry = tk.Entry(frame_tao_du_lieu_moi, width=10)
+
         entry.pack(side=tk.LEFT, padx=5)
         inputs[col] = entry
 
     # Tự động điền ID
     if 'ID' in cols:
-        max_id = data['ID'].astype(int).max()
+        max_id = data['ID'].astype(int).max() if not data['ID'].isnull().all() else 0
         inputs['ID'].insert(0, str(max_id + 1))
 
     # Nút "Tạo dữ liệu mới"
     def tao_du_lieu_moi():
         try:
-            new_data = [inputs[col].get() for col in cols]
-            
-            if any(field == "" for field in new_data):
-                messagebox.showwarning("Dữ liệu không hợp lệ", "Vui lòng điền đầy đủ thông tin!")
-                return
-            
+            new_data = []
+            for col in cols:
+                if col == 'ID' or col == 'No_Patients':
+                    new_data.append(int(inputs[col].get()))
+                elif col == 'AGE':
+                    value = inputs[col].get()
+                    if not value.isdigit() or int(value) <= 0 or int(value) >= 120:
+                        raise ValueError(f"{col} phải là kiểu int và lớn hơn 0 và bé hơn 120!")
+                    new_data.append(int(value))
+                else:
+                    value = inputs[col].get()
+                    new_data.append(value)
+
             # Thêm dữ liệu vào DataFrame
             data.loc[len(data)] = new_data
             hien_thi_du_lieu()
@@ -292,13 +301,15 @@ def main(frame=None):
             # Lưu lại dữ liệu vào file CSV
             data.to_csv(file_path, index=False)
             messagebox.showinfo("Thành công", "Dữ liệu đã được tạo mới!")
+        except ValueError as ve:
+            messagebox.showwarning("Giá trị không hợp lệ", str(ve))
         except Exception as e:
             messagebox.showerror("Lỗi", f"Không thể tạo dữ liệu mới: {e}")
 
     btn_tao_du_lieu = tk.Button(frame_tao_du_lieu_moi, text="Tạo", command=tao_du_lieu_moi)
     btn_tao_du_lieu.pack(side=tk.LEFT, padx=10)
 
-    # Khung cho Cập Nhật Dữ Liệu
+    # Khung cho Cập Nhập Dữ Liệu
     frame_cap_nhat_du_lieu = tk.Frame(window)
 
     # Thêm tiêu đề cho các cột
@@ -309,36 +320,48 @@ def main(frame=None):
     for col in cols:
         label = tk.Label(header_frame_update, text=col, width=10)
         label.pack(side=tk.LEFT)
-        
-        entry = tk.Entry(frame_cap_nhat_du_lieu, width=10)
+
+        if col in ['Gender', 'CLASS', 'BMI_CATEGORY']:
+            entry = ttk.Combobox(frame_cap_nhat_du_lieu, width=10)
+            unique_values = ['None'] + data[col].unique().tolist()
+            entry['values'] = unique_values
+        else:
+            entry = tk.Entry(frame_cap_nhat_du_lieu, width=10)
+
         entry.pack(side=tk.LEFT, padx=5)
         update_inputs[col] = entry
 
     # Nút "Cập nhật"
     def cap_nhat_du_lieu():
         try:
-            updated_data = [update_inputs[col].get() for col in cols]
+            updated_data = []
+            for col in cols:
+                if col == 'ID' or col == 'No_Patients':
+                    updated_data.append(int(update_inputs[col].get()))
+                elif col == 'AGE':
+                    value = update_inputs[col].get()
+                    if not value.isdigit() or int(value) <= 0 or int(value) >= 120:
+                        raise ValueError(f"{col} phải là kiểu int và lớn hơn 0 và bé hơn 120!")
+                    updated_data.append(int(value))
+                else:
+                    updated_data.append(update_inputs[col].get())
 
-            if any(field == "" for field in updated_data):
-                messagebox.showwarning("Dữ liệu không hợp lệ", "Vui lòng điền đầy đủ thông tin!")
-                return
-
-            # Lấy dòng được chọn trong Treeview
             selected_items = tree.selection()
             if not selected_items:
                 messagebox.showwarning("Cảnh báo", "Vui lòng chọn ít nhất một dòng để cập nhật!")
                 return
 
-            # Cập nhật dữ liệu cho từng dòng được chọn
             for selected_item in selected_items:
                 index = tree.index(selected_item)
                 for j in range(len(cols)):
                     data.at[index, cols[j]] = updated_data[j]
                     tree.item(selected_item, values=list(updated_data))
 
-            # Lưu lại dữ liệu vào file CSV
+            # Lưu dữ liệu vào file CSV sau khi cập nhật
             data.to_csv(file_path, index=False)
             messagebox.showinfo("Thành công", "Dữ liệu đã được cập nhật!")
+        except ValueError as ve:
+            messagebox.showwarning("Giá trị không hợp lệ", str(ve))
         except Exception as e:
             messagebox.showerror("Lỗi", f"Dữ liệu đã không được cập nhật! {e}")
 
@@ -348,57 +371,81 @@ def main(frame=None):
     # Tìm kiếm
     frame_tim_kiem = tk.Frame(window)
 
-    lbl_tim_kiem = tk.Label(frame_tim_kiem, text="Tìm kiếm theo ID: ")
+    # Nhãn cho combobox chọn cột
+    lbl_tim_kiem = tk.Label(frame_tim_kiem, text="Tìm kiếm theo:")
     lbl_tim_kiem.pack(side=tk.LEFT, padx=5)
 
-    entry_tim_kiem = tk.Entry(frame_tim_kiem, width=10)
-    entry_tim_kiem.pack(side=tk.LEFT, padx=5)
+    # Danh sách các cột có thể tìm kiếm (không bao gồm các cột "Gender", "CLASS" và "BMI_CATEGORY")
+    searchable_columns = [col for col in cols if col not in ['Gender', 'CLASS', 'BMI_CATEGORY']]
 
-    # Hàm tìm kiếm theo ID
-    def tim_kiem_theo_id():
+    # Combobox để chọn cột tìm kiếm
+    combo_search_column = ttk.Combobox(frame_tim_kiem, values=searchable_columns, width=15)
+    combo_search_column.set(searchable_columns[0])
+    combo_search_column.pack(side=tk.LEFT, padx=5)
+
+    # Ô nhập giá trị tìm kiếm
+    entry_tim_kiem_value = tk.Entry(frame_tim_kiem, width=10)
+    entry_tim_kiem_value.pack(side=tk.LEFT, padx=5)
+
+    # Hàm tìm kiếm theo cột và giá trị
+    def tim_kiem():
         global current_page
         try:
-            id_tra_cuu = entry_tim_kiem.get().strip()
-            if id_tra_cuu == "":
-                messagebox.showwarning("Cảnh báo", "Vui lòng nhập ID cần tìm!")
+            column_to_search = combo_search_column.get()
+            search_value = entry_tim_kiem_value.get().strip()
+            if search_value == "":
+                messagebox.showwarning("Cảnh báo", "Vui lòng nhập giá trị cần tìm!")
                 return
 
-            # Kiểm tra xem ID có tồn tại trong DataFrame không
-            ket_qua_tim_kiem = data[data['ID'].astype(str).str.strip() == id_tra_cuu]
+            ket_qua_tim_kiem = data[data[column_to_search].astype(str).str.contains(search_value, case=False, na=False)]
+
+            for row in tree.get_children():
+                tree.delete(row)
 
             if ket_qua_tim_kiem.empty:
-                messagebox.showinfo("Không tìm thấy", f"Không tìm thấy dữ liệu với ID = {id_tra_cuu}")
+                messagebox.showinfo("Không tìm thấy", f"Không tìm thấy dữ liệu với giá trị = {search_value} trong cột {column_to_search}")
             else:
-                # Hiển thị tất cả dữ liệu tìm được trong Treeview
-                for row in tree.get_children():
-                    tree.delete(row)
-
-                # Chỉ hiển thị dữ liệu của dòng có ID tìm được
                 for _, row in ket_qua_tim_kiem.iterrows():
                     tree.insert("", "end", values=list(row))
 
-                # Đặt current_page về 0 để không bị ảnh hưởng khi quay lại
                 current_page = 0  
                 update_page_info()
 
         except Exception as e:
             messagebox.showerror("Lỗi", f"Đã xảy ra lỗi trong quá trình tìm kiếm: {e}")
 
-    btn_tim_kiem = tk.Button(frame_tim_kiem, text="Tìm kiếm", command=tim_kiem_theo_id)
+    btn_tim_kiem = tk.Button(frame_tim_kiem, text="Tìm kiếm", command=tim_kiem)
     btn_tim_kiem.pack(side=tk.LEFT, padx=5)
 
-    # Tạo frame sắp xếp dữ liệu theo ID
+    # Tạo frame sắp xếp dữ liệu theo cột được chọn
     frame_sap_xep_du_lieu_theo_id = tk.Frame(window)
+
+    # Danh sách các cột có thể sắp xếp (không bao gồm các cột "Gender", "CLASS" và "BMI_CATEGORY")
+    sortable_columns = [col for col in cols if col not in ['Gender', 'CLASS', 'BMI_CATEGORY']]
+
+    # Nhãn cho combobox chọn cột
+    lbl_sort_column = tk.Label(frame_sap_xep_du_lieu_theo_id, text="Chọn cột để sắp xếp:")
+    lbl_sort_column.pack(side=tk.LEFT, padx=5)
+
+    # Combobox để chọn cột sắp xếp
+    combo_sort_column = ttk.Combobox(frame_sap_xep_du_lieu_theo_id, values=sortable_columns, width=15)
+    combo_sort_column.set(sortable_columns[0])
+    combo_sort_column.pack(side=tk.LEFT, padx=5)
 
     # Nút sắp xếp tăng dần
     def sap_xep_tang_dan():
         global data
         try:
-            data['ID'] = data['ID'].astype(int)
-            data.sort_values(by='ID', inplace=True, ascending=True)
-            data['ID'] = data['ID'].astype(str)
-            data.reset_index(drop=True, inplace=True)
+            column_to_sort = combo_sort_column.get()
+            if column_to_sort not in sortable_columns:
+                messagebox.showwarning("Cảnh báo", "Cột không hợp lệ!")
+                return
+            # Kiểm tra kiểu dữ liệu và sắp xếp
+            data.sort_values(by=column_to_sort, inplace=True, ascending=True)
             hien_thi_du_lieu()
+
+            # Lưu dữ liệu vào file CSV sau khi sắp xếp
+            data.to_csv(file_path, index=False)
             messagebox.showinfo("Thành công", "Dữ liệu đã được sắp xếp tăng dần!")
         except Exception as e:
             messagebox.showerror("Lỗi", f"Không thể sắp xếp dữ liệu: {e}")
@@ -410,11 +457,16 @@ def main(frame=None):
     def sap_xep_giam():
         global data
         try:
-            data['ID'] = data['ID'].astype(int)
-            data.sort_values(by='ID', inplace=True, ascending=False)
-            data['ID'] = data['ID'].astype(str)
-            data.reset_index(drop=True, inplace=True)
+            column_to_sort = combo_sort_column.get()
+            if column_to_sort not in sortable_columns:
+                messagebox.showwarning("Cảnh báo", "Cột không hợp lệ!")
+                return
+            # Kiểm tra kiểu dữ liệu và sắp xếp
+            data.sort_values(by=column_to_sort, inplace=True, ascending=False)
             hien_thi_du_lieu()
+
+            # Lưu dữ liệu vào file CSV sau khi sắp xếp
+            data.to_csv(file_path, index=False)
             messagebox.showinfo("Thành công", "Dữ liệu đã được sắp xếp giảm dần!")
         except Exception as e:
             messagebox.showerror("Lỗi", f"Không thể sắp xếp dữ liệu: {e}")
@@ -433,25 +485,26 @@ def main(frame=None):
     filter_frame = tk.Frame(frame_trich_loc)
     filter_frame.pack(side=tk.TOP)
 
-    # Duyệt từng đặc tính để lấy dữ liệu cho combobox
-    gender_options = data['Gender'].unique().tolist()
-    class_options = data['CLASS'].unique().tolist()
-    bmi_category_options = data['BMI_CATEGORY'].unique().tolist()
+    gender_options = ['None'] + data['Gender'].unique().tolist()
+    class_options = ['None'] + data['CLASS'].unique().tolist()
+    bmi_category_options = ['None'] + data['BMI_CATEGORY'].unique().tolist()
 
-    # Nhãn và ô combobox cho giá trị lọc
     lbl_gender = tk.Label(filter_frame, text="Gender:")
     lbl_gender.pack(side=tk.LEFT, padx=5)
     combo_gender = ttk.Combobox(filter_frame, values=gender_options, width=10)
+    combo_gender.set('None')
     combo_gender.pack(side=tk.LEFT, padx=5)
 
     lbl_class = tk.Label(filter_frame, text="CLASS:")
     lbl_class.pack(side=tk.LEFT, padx=5)
     combo_class = ttk.Combobox(filter_frame, values=class_options, width=10)
+    combo_class.set('None')
     combo_class.pack(side=tk.LEFT, padx=5)
 
     lbl_bmi_category = tk.Label(filter_frame, text="BMI CATEGORY:")
     lbl_bmi_category.pack(side=tk.LEFT, padx=5)
     combo_bmi_category = ttk.Combobox(filter_frame, values=bmi_category_options, width=10)
+    combo_bmi_category.set('None')
     combo_bmi_category.pack(side=tk.LEFT, padx=5)
 
     # Nút Lọc dữ liệu
@@ -462,19 +515,17 @@ def main(frame=None):
     def trich_loc(gender, class_val, bmi_category):
         global current_page
         try:
-            # Lọc dữ liệu dựa trên các tiêu chí đã nhập
             filtered_data = data
 
-            if gender:
+            if gender != 'None':
                 filtered_data = filtered_data[filtered_data['Gender'] == gender]
 
-            if class_val:
+            if class_val != 'None':
                 filtered_data = filtered_data[filtered_data['CLASS'] == class_val]
 
-            if bmi_category:
+            if bmi_category != 'None':
                 filtered_data = filtered_data[filtered_data['BMI_CATEGORY'] == bmi_category]
 
-            # Hiển thị dữ liệu đã lọc trên Treeview
             for row in tree.get_children():
                 tree.delete(row)
 

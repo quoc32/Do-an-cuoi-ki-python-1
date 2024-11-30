@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from io import StringIO
 from PIL import Image, ImageTk
+import pandas as pd
 
 from command import *
 import CRUD.CRUDf as crud
@@ -65,17 +66,17 @@ class CreateChartPage(Page):
 
         # Ô chọn đồ thị mặc định
         cacDoThiMacDinh = [
-            "1. Age Distribution By Health Class", 
-            "2. Béo Phì Theo Giới Tính", 
-            "3. BMI và Lipid", 
-            "4. BMI và HbA1c",
-            "5. Chỉ Số Than",
-            "6. Ma Trận Tương Quan",
-            "7. Mật Độ BMI",
-            "8. Phân Bổ BMI",
-            "9. Phân Bổ chỉ số Lipid",
-            "10. Phân Bổ HbA1c",
-            "11. Phân Bố Tuổi",
+            # "1. Age Distribution By Health Class", 
+            "1. Béo Phì Theo Giới Tính", 
+            "2. BMI và Lipid", 
+            "3. BMI và HbA1c",
+            "4. Chỉ Số Than",
+            "5. Ma Trận Tương Quan",
+            "6. Mật Độ BMI",
+            "7. Phân Bổ BMI",
+            "8. Phân Bổ chỉ số Lipid",
+            "9. Phân Bổ HbA1c",
+            "10. Phân Bố Tuổi",
         ]
         doThiMacDinh = ttk.Combobox(master=self, values=cacDoThiMacDinh, width=30, state="readonly")
         doThiMacDinh.set("1. Age Distribution By Health Class")
@@ -86,25 +87,25 @@ class CreateChartPage(Page):
             clearHandle() # Clear trước
             if(doThiMacDinh.get() == "1. Age Distribution By Health Class"):
                 veBieuDo_1(self)
-            elif(doThiMacDinh.get() == "2. Béo Phì Theo Giới Tính"):
+            elif(doThiMacDinh.get() == "1. Béo Phì Theo Giới Tính"):
                 veBieuDo_2(self)
-            elif(doThiMacDinh.get() == "3. BMI và Lipid"):
+            elif(doThiMacDinh.get() == "2. BMI và Lipid"):
                 veBieuDo_3(self)
-            elif(doThiMacDinh.get() == "4. BMI và HbA1c"):
+            elif(doThiMacDinh.get() == "3. BMI và HbA1c"):
                 veBieuDo_4(self)
-            elif(doThiMacDinh.get() == "5. Chỉ Số Than"):
+            elif(doThiMacDinh.get() == "4. Chỉ Số Than"):
                 veBieuDo_5(self)
-            elif(doThiMacDinh.get() == "6. Ma Trận Tương Quan"):
+            elif(doThiMacDinh.get() == "5. Ma Trận Tương Quan"):
                 veBieuDo_6(self)
-            elif(doThiMacDinh.get() == "7. Mật Độ BMI"):
+            elif(doThiMacDinh.get() == "6. Mật Độ BMI"):
                 veBieuDo_7(self)
-            elif(doThiMacDinh.get() == "8. Phân Bổ BMI"):
+            elif(doThiMacDinh.get() == "7. Phân Bổ BMI"):
                 veBieuDo_8(self)
-            elif(doThiMacDinh.get() == "9. Phân Bổ chỉ số Lipid"):
+            elif(doThiMacDinh.get() == "8. Phân Bổ chỉ số Lipid"):
                 veBieuDo_9(self)
-            elif(doThiMacDinh.get() == "10. Phân Bổ HbA1c"):
+            elif(doThiMacDinh.get() == "9. Phân Bổ HbA1c"):
                 veBieuDo_10(self)
-            elif(doThiMacDinh.get() == "11. Phân Bố Tuổi"):
+            elif(doThiMacDinh.get() == "10. Phân Bố Tuổi"):
                 veBieuDo_11(self)            
 
         button = tk.Button(master=self, text="Create", command=createHandle)
@@ -256,6 +257,215 @@ class ReadDataPage(Page):
 
         self.text_box.pack()
         self.text_box.config(state=tk.DISABLED)
+
+class ReadCleanDataPage(Page):
+    def __init__(self, master, name, clean_path, filterInfo=None):
+        super().__init__(master, name)
+        self.clean_path = clean_path
+        self.df = pd.read_csv(self.clean_path, index_col=False)
+        self.filterInfo = filterInfo
+        self.current_text_idx = 0
+        self.total_sub_page = 0
+
+        # Text hiển thị thông tin
+        self.text_box = tk.Text(master=self, height=26, width=150)
+        buffer = self.df.to_string(index=False)
+        buffer = buffer.split('\n')
+        self.header = buffer[0] + '\n'
+        buffer = buffer[1:]
+        
+        # Biến cần thiết
+        self.chunks = []
+        chunk = []
+        newline_count = 0
+        # Tạo đoạn mỗi 25 dòng
+        for line in buffer:
+            chunk.append(line)
+            newline_count += 1
+            if newline_count == 25:
+                self.chunks.append('\n'.join(chunk))
+                chunk = []
+                newline_count = 0
+                self.total_sub_page += 1
+        # Thêm lần cuối với trường hợp lỡ không đủ
+        self.chunks.append('\n'.join(chunk))
+        chunk = []
+        newline_count = 0
+        self.total_sub_page += 1
+
+        # Pack lên Frame
+        self.text_box.delete(1.0, tk.END)
+        self.text_box.insert(tk.END, self.header)
+        self.text_box.insert(tk.END, self.chunks[self.current_text_idx])
+
+        self.text_box.pack()
+        self.text_box.config(state=tk.DISABLED)
+
+        # Tạo nút next và xử lý khi nhấn
+        button = tk.Button(master=self, text="Next", command=lambda : self.nextHandle())
+        button.place(x=740, y=420, width=50, height=20)
+        # Tạo nút pre và xử lý khi nhấn
+        button = tk.Button(master=self, text="Pre", command=lambda : self.preHandle())
+        button.place(x=690, y=420, width=50, height=20)
+        # Tạo nút refresh và xử lý khi nhấn
+        button = tk.Button(master=self, text="Refresh", command=lambda : self.refreshHandle())
+        button.place(x=640, y=420, width=50, height=20)
+
+        # Tạo nhãn hiển thị số trang hiện tại và số trang tối đa
+        self.current_label = tk.Label(master=self, text=f"{self.current_text_idx + 1}/{self.total_sub_page}", bg="black", fg="white")
+        self.current_label.place(x=330, y=420, width=80, height=20)
+
+        # Tạo nhãn cho go_to_idx input
+        go_to_idx_label = tk.Label(master=self, text=f"Đến trang: ", bg="black", fg="white")
+        go_to_idx_label.place(x=20, y=420, width=80, height=20)
+        self.idx_input = tk.Entry(self, width=30)
+        self.idx_input.place(x=100, y=420, width=40)
+        button = tk.Button(master=self, text="go", command=lambda : self.goHandle(self.idx_input.get()))
+        button.place(x=132, y=420, width=50, height=20)
+
+    # Change text_box index
+    def setFilterInfo(self, newIdx):
+        self.current_text_idx = newIdx
+        self.text_box.delete(1.0, tk.END)
+        self.text_box.insert(tk.END, self.header)
+        self.text_box.insert(tk.END, self.chunks[self.current_text_idx])
+    # Xử lý khi nhấn next
+    def nextHandle(self):
+        if self.current_text_idx >= self.total_sub_page - 1:
+            return
+
+        self.current_text_idx += 1
+        self.text_box.destroy()
+        self.current_label.destroy()
+
+        # Đặt lại text_box
+        self.text_box = tk.Text(master=self, height=26, width=150)
+        self.text_box.insert(tk.END, self.header)
+        self.text_box.insert(tk.END, self.chunks[self.current_text_idx])
+        # Đặt lại nhãn
+        self.current_label = tk.Label(master=self, text=f"{self.current_text_idx + 1}/{self.total_sub_page}", bg="black", fg="white")
+        self.current_label.place(x=330, y=420, width=80, height=20)
+
+        self.text_box.pack()
+        self.text_box.config(state=tk.DISABLED)
+    # Xử lý khi nhấn pre
+    def preHandle(self):
+        if self.current_text_idx <= 0:
+            return
+
+        self.current_text_idx -= 1
+        self.text_box.destroy()
+        self.current_label.destroy()
+
+        # Đặt lại text_box
+        self.text_box = tk.Text(master=self, height=26, width=150)
+        self.text_box.insert(tk.END, self.header)
+        self.text_box.insert(tk.END, self.chunks[self.current_text_idx])
+        # Đặt lại nhãn
+        self.current_label = tk.Label(master=self, text=f"{self.current_text_idx + 1}/{self.total_sub_page}", bg="black", fg="white")
+        self.current_label.place(x=330, y=420, width=80, height=20)
+
+        self.text_box.pack()
+        self.text_box.config(state=tk.DISABLED)
+    # Xử lý khi nhấn go
+    def goHandle(self, idx):
+        if not idx.isdigit():
+            print("index không hợp lệ")
+            self.idx_input.delete(0, tk.END)
+            return
+        
+        idx = int(idx) - 1
+
+        if idx < 0 or idx >= self.total_sub_page:
+            print("index vượt ra khỏi range hợp lệ")
+            self.idx_input.delete(0, tk.END)
+            return
+        
+        self.idx_input.delete(0, tk.END)
+
+        self.current_text_idx = idx
+        self.text_box.destroy()
+        self.current_label.destroy()
+
+        # Đặt lại text_box
+        self.text_box = tk.Text(master=self, height=26, width=150)
+        self.text_box.insert(tk.END, self.header)
+        self.text_box.insert(tk.END, self.chunks[self.current_text_idx])
+        # Đặt lại nhãn
+        self.current_label = tk.Label(master=self, text=f"{self.current_text_idx + 1}/{self.total_sub_page}", bg="black", fg="white")
+        self.current_label.place(x=330, y=420, width=80, height=20)
+
+        self.text_box.pack()
+        self.text_box.config(state=tk.DISABLED)
+    # Xử lý khi nhấn refresh
+    def refreshHandle(self):
+        # Đọc lại dữ liệu từ CSV
+        self.df = pd.read_csv(self.clean_path, index_col=False)
+        self.current_text_idx = 0
+        self.total_sub_page = 0
+
+        # Text hiển thị thông tin
+        self.text_box.delete(1.0, tk.END)  # Xóa hết nội dung hiện tại
+        buffer = self.df.to_string(index=False)
+        buffer = buffer.split('\n')
+        self.header = buffer[0] + '\n'
+        buffer = buffer[1:]
+
+        # Biến cần thiết cho việc chia thành trang
+        self.chunks = []
+        chunk = []
+        newline_count = 0
+        # Tạo đoạn mỗi 25 dòng
+        for line in buffer:
+            chunk.append(line)
+            newline_count += 1
+            if newline_count == 25:
+                self.chunks.append('\n'.join(chunk))
+                chunk = []
+                newline_count = 0
+                self.total_sub_page += 1
+        # Thêm lần cuối nếu chưa đủ 25 dòng
+        if chunk:
+            self.chunks.append('\n'.join(chunk))
+            self.total_sub_page += 1
+
+        # Cập nhật lại text_box với nội dung mới
+        self.text_box.insert(tk.END, self.header)
+        self.text_box.insert(tk.END, self.chunks[self.current_text_idx])
+
+        self.text_box.pack()
+        self.text_box.config(state=tk.DISABLED)
+
+        # Cập nhật lại các nút điều khiển
+        self.capNhatCacNut()
+        self.nextHandle()
+        self.preHandle()
+
+    def capNhatCacNut(self):
+        # Cập nhật lại các nút next, pre và nhãn số trang
+        if hasattr(self, 'current_label'):  # Kiểm tra xem nhãn đã được tạo hay chưa
+            self.current_label.destroy()
+        
+        self.current_label = tk.Label(master=self, text=f"{self.current_text_idx + 1}/{self.total_sub_page}", bg="black", fg="white")
+        self.current_label.place(x=330, y=420, width=80, height=20)
+
+        if hasattr(self, 'idx_input'):  # Kiểm tra xem input đã được tạo hay chưa
+            self.idx_input.delete(0, tk.END)
+        
+        # Tạo lại nhãn và input cho việc chuyển đến trang
+        go_to_idx_label = tk.Label(master=self, text=f"Đến trang: ", bg="black", fg="white")
+        go_to_idx_label.place(x=20, y=420, width=80, height=20)
+        self.idx_input = tk.Entry(self, width=30)
+        self.idx_input.place(x=100, y=420, width=40)
+        button = tk.Button(master=self, text="go", command=lambda: self.goHandle(self.idx_input.get()))
+        button.place(x=132, y=420, width=50, height=20)
+
+        # Cập nhật các nút next và pre
+        button_next = tk.Button(master=self, text="Next", command=lambda: self.nextHandle())
+        button_next.place(x=740, y=420, width=50, height=20)
+
+        button_pre = tk.Button(master=self, text="Pre", command=lambda: self.preHandle())
+        button_pre.place(x=690, y=420, width=50, height=20)
 
 # Trang thay đôir dữ liệu
 class CRUDDataPage(Page):

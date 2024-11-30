@@ -33,6 +33,8 @@ class App:
         appChangeDataPage = CRUDDataPage(master=self.root, name="Change Data")
         # Trang chứa tiện ích đọc Dữ liệu goc
         appReadDataPage = ReadDataPage(master=self.root, name="Read Data", df=self.df, filterInfo=self.filterInfo)
+        # Trang chứa tiện ích đọc Dữ liệu Clean
+        appReadCleanDataPage = ReadCleanDataPage(master=self.root, name="Read Data", clean_path="../data/clean.csv", filterInfo=self.filterInfo)
         # Trang chứa tiện clean Dữ liệu 
         appFilterDataPage = CleanDataPage(master=self.root, name="Clean Data")
 
@@ -45,6 +47,7 @@ class App:
             "CRUDData": appChangeDataPage,
             "CleanData": appFilterDataPage,
             "ReadData": appReadDataPage,
+            "ReadCleanData": appReadCleanDataPage,
             "AboutUs": appAboutUsPage,
         }
 
@@ -54,15 +57,18 @@ class App:
         # Tạo nút Đọc dữ liệu gốc
         button = tk.Button(self.root, text="Dữ Liệu Gốc", command=lambda: go_to_read_data(self.root, self.pages))
         button.place(x=0, y=30, width=80, height=30)
+        # Tạo nút Đọc dữ liệu clean
+        button = tk.Button(self.root, text="Dữ Liệu Clean", command=lambda: go_to_read_clean_data(self.root, self.pages))
+        button.place(x=0, y=60, width=80, height=30)
         # Tạo nút TẠO BIỂU ĐỒ
         button = tk.Button(self.root, text="Tạo Biểu Đồ", command=lambda: go_to_create_chart(self.root, self.pages))
-        button.place(x=0, y=60, width=80, height=30)
+        button.place(x=0, y=90, width=80, height=30)
         # Tạo nút Đổi dữ liệu
         button = tk.Button(self.root, text="CRUD", command=lambda: go_to_CRUD_data(self.root, self.pages))
-        button.place(x=0, y=90, width=80, height=30)
+        button.place(x=0, y=120, width=80, height=30)
         # Tạo nút Lọc dữ liệu (bổ trợ cho đọc dữ liệu)
         button = tk.Button(self.root, text="Làm Sạch DL", command=lambda: go_to_clean_data(self.root, self.pages))
-        button.place(x=0, y=120, width=80, height=30)
+        button.place(x=0, y=150, width=80, height=30)
 
         # Tạo nút About Us
         button = tk.Button(self.root, text="About Us", command=lambda: go_to_about_us(self.root, self.pages))
