@@ -67,7 +67,7 @@ class CreateChartPage(Page):
         # Ô chọn đồ thị mặc định
         cacDoThiMacDinh = [
             # "1. Age Distribution By Health Class", 
-            "1. Béo Phì Theo Giới Tính", 
+            "1. Tiểu đường Theo Giới Tính", 
             "2. BMI và Lipid", 
             "3. BMI và HbA1c",
             "4. Chỉ Số Than",
@@ -79,7 +79,7 @@ class CreateChartPage(Page):
             "10. Phân Bố Tuổi",
         ]
         doThiMacDinh = ttk.Combobox(master=self, values=cacDoThiMacDinh, width=30, state="readonly")
-        doThiMacDinh.set("1. Age Distribution By Health Class")
+        doThiMacDinh.set("1. Tiểu đường Theo Giới Tính")
         doThiMacDinh.place(x=5, y=5)
 
         # Tạo nút CREATE và xử lý khi nhấn
@@ -87,7 +87,7 @@ class CreateChartPage(Page):
             clearHandle() # Clear trước
             if(doThiMacDinh.get() == "1. Age Distribution By Health Class"):
                 veBieuDo_1(self)
-            elif(doThiMacDinh.get() == "1. Béo Phì Theo Giới Tính"):
+            elif(doThiMacDinh.get() == "1. Tiểu đường Theo Giới Tính"):
                 veBieuDo_2(self)
             elif(doThiMacDinh.get() == "2. BMI và Lipid"):
                 veBieuDo_3(self)

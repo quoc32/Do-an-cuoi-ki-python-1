@@ -65,7 +65,7 @@ def veBieuDo_1(page):
     label1.place(x=10, y=70)
 
 def veBieuDo_2(page):
-    img2 = Image.open("./chart_img/beo_phi_theo_gioi_tinh.png")
+    img2 = Image.open("./chart_img/beo_phi_theo_gioi_tinh_2.png")
     img2 = img2.resize((550, 330))
     page.tk_img2 = ImageTk.PhotoImage(img2)
 
@@ -105,7 +105,7 @@ def veBieuDo_6(page):
     label6.place(x=10, y=70)
 
 def veBieuDo_7(page):
-    img7 = Image.open("./chart_img/mat_do_bmi.png")
+    img7 = Image.open("./chart_img/mat_do_bmi_2.png")
     img7 = img7.resize((550, 340))
     page.tk_img7 = ImageTk.PhotoImage(img7)
 
@@ -113,7 +113,7 @@ def veBieuDo_7(page):
     label7.place(x=10, y=70)
     
 def veBieuDo_8(page):
-    img8 = Image.open("./chart_img/phan_bo_bmi.png")
+    img8 = Image.open("./chart_img/phan_bo_bmi_2.png")
     img8 = img8.resize((550, 340))
     page.tk_img8 = ImageTk.PhotoImage(img8)
 
@@ -121,7 +121,7 @@ def veBieuDo_8(page):
     label8.place(x=10, y=70)
 
 def veBieuDo_9(page):
-    img9 = Image.open("./chart_img/phan_bo_chi_so_lipit.png")
+    img9 = Image.open("./chart_img/phan_bo_chi_so_lipit_2.png")
     img9 = img9.resize((700, 350))
     page.tk_img9 = ImageTk.PhotoImage(img9)
 
@@ -129,7 +129,7 @@ def veBieuDo_9(page):
     label9.place(x=10, y=70)
 
 def veBieuDo_10(page):
-    img10 = Image.open("./chart_img/phan_bo_hba1c.png")
+    img10 = Image.open("./chart_img/phan_bo_hba1c_2.png")
     img10 = img10.resize((550, 340))
     page.tk_img10 = ImageTk.PhotoImage(img10)
 
@@ -137,7 +137,7 @@ def veBieuDo_10(page):
     label10.place(x=10, y=70)
     
 def veBieuDo_11(page):
-    img11 = Image.open("./chart_img/phan_bo_tuoi.png")
+    img11 = Image.open("./chart_img/phan_bo_tuoi_2.png")
     img11 = img11.resize((550, 330))
     page.tk_img11 = ImageTk.PhotoImage(img11)
 
