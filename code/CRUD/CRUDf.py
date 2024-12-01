@@ -15,7 +15,7 @@ data = pd.read_csv(file_path)  # Đọc dữ liệu từ file CSV ngay khi bắt
 def main(frame=None):
     if frame:
         frame.toggleOnImg()
-    
+
     # Khởi tạo cửa sổ tkinter
     window = tk.Tk()
     window.title("Quản lý Dữ Liệu")
@@ -79,7 +79,7 @@ def main(frame=None):
     btn_create_page = tk.Button(frame_nut_chuc_nang, text="Tạo dữ liệu mới", command=show_create_page)
     btn_create_page.pack(side=tk.LEFT, padx=5)
 
-    def show_update_page():
+    def show_update_page(event=None):
         frame_cap_nhat_du_lieu.pack(pady=10)
         frame_tao_du_lieu_moi.pack_forget()
         frame_tim_kiem.pack_forget()
@@ -90,18 +90,22 @@ def main(frame=None):
         selected_items = tree.selection()
         if selected_items:
             selected_item = selected_items[0]
-            index = tree.index(selected_item)
-            selected_data = data.iloc[index]
+            selected_data = tree.item(selected_item)['values']
+            selected_id = selected_data[0]
+            selected_row = data.loc[data['ID'] == selected_id].iloc[0]  # Lấy row tương ứng trong dataframe
 
             for col in cols:
                 if col in ['Gender', 'CLASS', 'BMI_CATEGORY']:
-                    update_inputs[col].set(selected_data[col])
+                    update_inputs[col].set(selected_row[col])
                 else:
                     update_inputs[col].delete(0, tk.END)
-                    update_inputs[col].insert(0, selected_data[col])
+                    update_inputs[col].insert(0, selected_row[col])
 
     btn_update_page = tk.Button(frame_nut_chuc_nang, text="Cập nhật dữ liệu", command=show_update_page)
     btn_update_page.pack(side=tk.LEFT, padx=5)
+
+    # Thêm sự kiện chọn hàng
+    tree.bind("<<TreeviewSelect>>", show_update_page)
 
     def show_delete_page():
         frame_cap_nhat_du_lieu.pack_forget()
@@ -117,7 +121,7 @@ def main(frame=None):
     frame_xoa_du_lieu = tk.Frame(window)
 
     def xoa_du_lieu():
-        global data  # Đánh dấu data là biến toàn cục
+        global data
         try:
             selected_items = tree.selection()
             if not selected_items:
